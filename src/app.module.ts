@@ -18,8 +18,9 @@ import { Bond } from "./bond/entities/bond.entity";
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
+
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: true, // keep true only for development; set false in production later
     }),
 
     // Feature module
