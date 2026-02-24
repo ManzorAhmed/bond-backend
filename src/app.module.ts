@@ -11,14 +11,15 @@ import { Bond } from "./bond/entities/bond.entity";
     }),
 
     // MySQL connection via TypeORM
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: "mysql",
-        url: config.get<string>("DATABASE_URL"),
-        autoLoadEntities: true,
-        synchronize: true, // ok for testing
-      }),
+    TypeOrmModule.forRoot({
+      type: "mysql",
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      autoLoadEntities: true,
+      synchronize: true,
     }),
 
     // Feature module
