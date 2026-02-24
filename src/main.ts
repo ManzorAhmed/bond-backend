@@ -5,16 +5,12 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // ✅ CORS — add Vercel URL after frontend deploy
+  // ✅ Allow all origins — fixes CORS for any frontend URL
   app.enableCors({
-    origin: [
-      'http://localhost:5173',
-      'http://localhost:3000',
-      'https://bond-backend-ea7e.onrender.com',
-      // 'https://your-app.vercel.app',  ← uncomment after Vercel deploy
-    ],
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type'],
+    origin: true,
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
+    credentials: false,
   });
 
   // Global validation
