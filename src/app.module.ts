@@ -14,15 +14,12 @@ import { Bond } from './bond/entities/bond.entity';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        type: 'mysql',
-        host: config.get<string>('DB_HOST'),
-        port: config.get<number>('DB_PORT'),
-        username: config.get<string>('DB_USERNAME'),
-        password: config.get<string>('DB_PASSWORD'),
-        database: config.get<string>('DB_DATABASE'),
+        // ✅ Switched from mysql → postgres
+        type: 'postgres',
+        url: config.get<string>('DATABASE_URL'),
         entities: [Bond],
-        synchronize: true,
-        // ✅ Required for Aiven — SSL is mandatory
+        synchronize: true, // auto-creates tables
+        // ✅ Required for Render PostgreSQL
         ssl: {
           rejectUnauthorized: false,
         },
