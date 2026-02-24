@@ -10,6 +10,7 @@ async function bootstrap() {
     origin: [
       'http://localhost:5173',
       'http://localhost:3000',
+      'https://bond-backend-ea7e.onrender.com',
       // 'https://your-app.vercel.app',  ← uncomment after Vercel deploy
     ],
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
