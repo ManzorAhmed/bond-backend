@@ -12,21 +12,22 @@ import { Bond } from './bond/entities/bond.entity';
     }),
 
     // MySQL connection via TypeORM
-    TypeOrmModule.forRootAsync({
+   TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        type: 'mysql',
-        host: config.get<string>('DB_HOST', 'localhost'),
-        port: config.get<number>('DB_PORT', 3306),
-        username: config.get<string>('DB_USERNAME', 'root'),
-        password: config.get<string>('DB_PASSWORD', ''),
-        database: config.get<string>('DB_DATABASE', 'bond_calculator'),
-        entities: [Bond],
-        synchronize: true,  
-        logging: config.get('NODE_ENV') === 'development',
+        type: "postgres",
+        url: config.get<string>("DATABASE_URL"),
+
+        autoLoadEntities: true,
+        synchronize: false,
+
+        ssl: {
+          rejectUnauthorized: false,
+        },
       }),
     }),
+
 
     // Feature module
     BondModule,
