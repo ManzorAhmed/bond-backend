@@ -23,8 +23,9 @@ export class Bond {
   @Column({ type: 'decimal', precision: 6, scale: 2, name: 'years_to_maturity' })
   yearsToMaturity: number;
 
-  @Column({ type: 'tinyint', name: 'coupon_frequency' })
-  couponFrequency: number; // 1 = annual, 2 = semi-annual
+  // ✅ Changed: tinyint → smallint (PostgreSQL compatible)
+  @Column({ type: 'smallint', name: 'coupon_frequency' })
+  couponFrequency: number;
 
   // ─── Outputs ─────────────────────────────────────────────────
   @Column({ type: 'decimal', precision: 10, scale: 6, name: 'current_yield' })
@@ -36,11 +37,8 @@ export class Bond {
   @Column({ type: 'decimal', precision: 15, scale: 2, name: 'total_interest' })
   totalInterest: number;
 
-  @Column({
-    type: 'enum',
-    enum: ['premium', 'discount', 'par'],
-    name: 'pricing_status',
-  })
+  // ✅ Changed: enum → varchar (PostgreSQL compatible)
+  @Column({ type: 'varchar', length: 10, name: 'pricing_status' })
   pricingStatus: 'premium' | 'discount' | 'par';
 
   @CreateDateColumn({ name: 'created_at' })
