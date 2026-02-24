@@ -28,7 +28,7 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
     const port = process.env.PORT || 3000; // REQUIRED for Railway
-    await app.listen(port, "0.0.0.0"); // REQUIRED
+   await app.listen(process.env.PORT || 3000, '0.0.0.0');
 
     console.log(`\n🚀 Bond API running at: http://localhost:${port}/api`);
     console.log(`📋 Endpoints:`);
