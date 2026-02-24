@@ -11,6 +11,7 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
 const bond_module_1 = require("./bond/bond.module");
+const bond_entity_1 = require("./bond/entities/bond.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -24,13 +25,15 @@ exports.AppModule = AppModule = __decorate([
                 imports: [config_1.ConfigModule],
                 inject: [config_1.ConfigService],
                 useFactory: (config) => ({
-                    type: "postgres",
-                    url: config.get("DATABASE_URL"),
-                    autoLoadEntities: true,
-                    synchronize: false,
-                    ssl: {
-                        rejectUnauthorized: false,
-                    },
+                    type: 'mysql',
+                    host: config.get('DB_HOST', 'localhost'),
+                    port: config.get('DB_PORT', 3306),
+                    username: config.get('DB_USERNAME', 'root'),
+                    password: config.get('DB_PASSWORD', ''),
+                    database: config.get('DB_DATABASE', 'bond_calculator'),
+                    entities: [bond_entity_1.Bond],
+                    synchronize: true,
+                    logging: config.get('NODE_ENV') === 'development',
                 }),
             }),
             bond_module_1.BondModule,
