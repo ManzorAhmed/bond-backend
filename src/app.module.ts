@@ -1,8 +1,8 @@
-import { Module } from "@nestjs/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { BondModule } from "./bond/bond.module";
-import { Bond } from "./bond/entities/bond.entity";
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { BondModule } from './bond/bond.module';
+import { Bond } from './bond/entities/bond.entity';
 
 @Module({
   imports: [
@@ -10,20 +10,25 @@ import { Bond } from "./bond/entities/bond.entity";
       isGlobal: true,
     }),
 
-    // MySQL connection via TypeORM
-    TypeOrmModule.forRoot({
-      type: "mysql",
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-
-      autoLoadEntities: true,
-      synchronize: true, // keep true only for development; set false in production later
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'mysql',
+        host: config.get<string>('DB_HOST'),
+        port: config.get<number>('DB_PORT'),
+        username: config.get<string>('DB_USERNAME'),
+        password: config.get<string>('DB_PASSWORD'),
+        database: config.get<string>('DB_DATABASE'),
+        entities: [Bond],
+        synchronize: true,
+        // ✅ Required for Aiven — SSL is mandatory
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      }),
     }),
 
-    // Feature module
     BondModule,
   ],
 })
